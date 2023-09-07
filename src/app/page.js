@@ -1,95 +1,61 @@
+'use client'
 import Image from 'next/image'
 import styles from './page.module.css'
+import { useEffect, useState,useRef } from 'react'
 
-export default function Home() {
+export default function Home({delayResend="600"}) {
+
+  const timer1=useRef(null)
+  const timer2=useRef(null)
+
+  const [delay1,setDealy1]=useState(+delayResend)
+  const [delay2,setDealy2]=useState(+delayResend)
+  const [isPlaying1, setIsPlaying1]=useState(false)
+  const [isPlaying2, setIsPlaying2]=useState(false)
+
+  const minutes1=Math.floor(delay1/60)
+  const seconds1=Math.floor(delay1%60)
+
+  const minutes2=Math.floor(delay2/60)
+  const seconds2=Math.floor(delay2%60)
+
+useEffect(()=>{
+  if(isPlaying1){
+    timer1.current=setTimeout(()=>{
+    setDealy1(delay1-1)
+    },1000)
+      }
+      if(delay1===0){
+        clearInterval(timer1.current)
+      }
+
+  if(isPlaying2){
+        timer2.current=setTimeout(()=>{
+        setDealy2(delay2-1)
+        },1000)
+          }
+          if(delay2===0){
+            clearInterval(timer2.current)
+          }
+
+        return()=>{
+          clearInterval(timer1.current)
+          clearInterval(timer2.current)
+        }
+})
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+   <div className='container'>
+    <div className='row mb-2' style={{height:"350px"}}>
+      <button className='btn btn-primary' onClick={()=>{setIsPlaying2(!isPlaying2);setIsPlaying1(isPlaying2)}}>
+        <h1>{minutes1}:{seconds1}</h1>
+</button>
+    </div>
+    <div className='row mb-2'  style={{height:"350px"}}>
+      <button className='btn btn-primary' onClick={()=>{setIsPlaying1(!isPlaying1);setIsPlaying2(isPlaying1)}}>
+      <h1>{minutes2}:{seconds2}</h1>
+      </button>
+    </div>
+   </div>
   )
 }
